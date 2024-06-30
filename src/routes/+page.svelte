@@ -26,11 +26,11 @@
 </script>
 
 <div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
-	<header class="border-b bg-card p-4" data-id="2">
-		<div class="mx-auto flex max-w-4xl items-center justify-between" data-id="3">
-			<h1 class="text-2xl font-bold" data-id="4">Collaborative Ideation</h1>
-			<div class="flex items-center gap-4" data-id="5">
-				<div class="flex items-center gap-2 text-primary" data-id="6">
+	<header class="border-b bg-card p-4">
+		<div class="mx-auto flex max-w-4xl items-center justify-between">
+			<h1 class="text-2xl font-bold">Collaborative Ideation</h1>
+			<div class="flex items-center gap-4">
+				<div class="flex items-center gap-2 text-primary">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -42,15 +42,14 @@
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						class="h-5 w-5"
-						data-id="7"
 						><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"
 						></line><circle cx="12" cy="14" r="8"></circle></svg
-					><span class="text-lg font-medium" data-id="8">5:00</span>
+					><span class="text-lg font-medium">5:00</span>
 				</div>
 				<a
 					href="/all"
 					class="ring-offset-background focus-visible:ring-ring inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-					data-id="9">End Session</a
+					>End Session</a
 				>
 			</div>
 		</div>
