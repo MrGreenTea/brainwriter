@@ -29,6 +29,29 @@
 	<header class="bg-card border-b p-4" data-id="2">
 		<div class="mx-auto flex max-w-4xl items-center justify-between" data-id="3">
 			<h1 class="text-2xl font-bold" data-id="4">Collaborative Ideation</h1>
+			<div class="flex items-center gap-4" data-id="5">
+				<div class="text-primary flex items-center gap-2" data-id="6">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="h-5 w-5"
+						data-id="7"
+						><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"
+						></line><circle cx="12" cy="14" r="8"></circle></svg
+					><span class="text-lg font-medium" data-id="8">5:00</span>
+				</div>
+				<button
+					class="ring-offset-background focus-visible:ring-ring bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+					data-id="9">End Session</button
+				>
+			</div>
 		</div>
 	</header>
 	<PageComponent
