@@ -5,16 +5,16 @@
 	export let subtitle: string | null = null;
 </script>
 
-<div class="bg-background border-muted overflow-hidden rounded-lg border">
-	<div class="bg-primary text-primary-foreground mb-4 flex items-center justify-between px-4 py-2">
+<div class="bg-background overflow-hidden rounded-lg border border-muted">
+	<div class="mb-4 flex items-center justify-between bg-primary px-4 py-2 text-primary-foreground">
 		<h2 class="text-lg font-bold">{title}</h2>
-		{#if subtitle}<div class="text-muted text-sm">{subtitle}</div>{/if}
+		{#if subtitle}<div class="text-sm text-muted">{subtitle}</div>{/if}
 	</div>
 	<div class="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
 		{#each page.writtenIdeas as idea}
-			<div class="bg-card overflow-hidden rounded-lg shadow-md">
+			<div class="overflow-hidden rounded-lg bg-card shadow-md">
 				<div class="p-4">
-					<p class="text-muted-foreground mb-4">{idea}</p>
+					<p class="mb-4 text-muted-foreground">{idea}</p>
 				</div>
 			</div>
 		{/each}

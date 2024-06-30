@@ -26,11 +26,11 @@
 </script>
 
 <div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
-	<header class="bg-card border-b p-4" data-id="2">
+	<header class="border-b bg-card p-4" data-id="2">
 		<div class="mx-auto flex max-w-4xl items-center justify-between" data-id="3">
 			<h1 class="text-2xl font-bold" data-id="4">Collaborative Ideation</h1>
 			<div class="flex items-center gap-4" data-id="5">
-				<div class="text-primary flex items-center gap-2" data-id="6">
+				<div class="flex items-center gap-2 text-primary" data-id="6">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -48,7 +48,7 @@
 					><span class="text-lg font-medium" data-id="8">5:00</span>
 				</div>
 				<button
-					class="ring-offset-background focus-visible:ring-ring bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+					class="ring-offset-background focus-visible:ring-ring inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
 					data-id="9">End Session</button
 				>
 			</div>
@@ -60,7 +60,7 @@
 		subtitle={`Current Round: ${$currentRound || initialRound}`}
 	/>
 	{#if $page.submitted}
-		<p class="text-muted-foreground text-sm">
+		<p class="text-sm text-muted-foreground">
 			Waiting for others to submit their ideas before moving to next round.
 		</p>
 	{:else}
@@ -71,7 +71,7 @@
 					{#each newIdeas as idea, i}
 						<div>
 							<input
-								class="border-input bg-background ring-offset-background focus-visible:ring-ring placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+								class="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 								required
 								name={`idea${i}`}
 								bind:value={idea}
@@ -81,7 +81,7 @@
 					{/each}
 					<div class="flex justify-end">
 						<button
-							class="ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+							class="ring-offset-background focus-visible:ring-ring inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
 							type="submit"
 							disabled={newIdeaCount < ideasPerRound}
 						>
