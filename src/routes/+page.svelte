@@ -47,9 +47,10 @@
 						></line><circle cx="12" cy="14" r="8"></circle></svg
 					><span class="text-lg font-medium" data-id="8">5:00</span>
 				</div>
-				<button
+				<a
+					href="/all"
 					class="ring-offset-background focus-visible:ring-ring inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-					data-id="9">End Session</button
+					data-id="9">End Session</a
 				>
 			</div>
 		</div>
