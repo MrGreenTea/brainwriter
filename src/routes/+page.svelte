@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { source } from 'sveltekit-sse';
 	import type { Page } from '$lib/data';
+	import type { PageData } from './$types';
+	import { derived, type Readable } from 'svelte/store';
+	import PageComponent from '$lib/components/Page.svelte';
 
 	const currentRound = source('/api').select('round');
 	const pages = source('/api')
@@ -9,46 +12,61 @@
 			console.error(`Could not parse "${raw}" as json.`, error);
 			return previous; // This will be the new value of the store
 		});
-	import type { PageData } from './$types';
-	import { derived } from 'svelte/store';
 	export let data: PageData;
 	const { page: initialPage, currentRound: initialRound } = data;
 	let { ideasPerRound } = initialPage;
 
-	const page = derived(
+	const page: Readable<Page> = derived(
 		pages,
 		(pages) => pages?.find((p: Page) => p.sessionId === initialPage.sessionId) || initialPage
 	);
-	const writtenIdeas = derived(page, (page) => page?.writtenIdeas || []);
 
 	let newIdeas = new Array(ideasPerRound).fill('');
 	$: newIdeaCount = newIdeas.filter((idea) => idea.trim() !== '').length;
 </script>
 
-<h1>Brainwriting session - Round {$currentRound || initialRound}</h1>
-
-<div>
-	{#each $writtenIdeas as idea}
-		<p>{idea}</p>
-	{/each}
-</div>
-
-{#if $page.submitted}
-	<p>Waiting for others to submit</p>
-{:else}
-	<form method="POST">
-		<fieldset name="ideas">
-			{#each newIdeas as idea, i}
-				<div>
-					<input required name={`idea${i}`} bind:value={idea} />
+<div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
+	<header class="bg-card border-b p-4" data-id="2">
+		<div class="mx-auto flex max-w-4xl items-center justify-between" data-id="3">
+			<h1 class="text-2xl font-bold" data-id="4">Collaborative Ideation</h1>
+		</div>
+	</header>
+	<PageComponent
+		page={$page || initialPage}
+		title="Previous Ideas"
+		subtitle={`Current Round: ${$currentRound || initialRound}`}
+	/>
+	{#if $page.submitted}
+		<p class="text-muted-foreground text-sm">
+			Waiting for others to submit their ideas before moving to next round.
+		</p>
+	{:else}
+		<form class="grid grid-cols-1 gap-4" method="POST">
+			<div class="bg-background rounded-lg border p-4">
+				<h2 class="mb-4 text-lg font-semibold">New Ideas</h2>
+				<div class="grid grid-cols-1 gap-3">
+					{#each newIdeas as idea, i}
+						<div>
+							<input
+								class="border-input bg-background ring-offset-background focus-visible:ring-ring placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+								required
+								name={`idea${i}`}
+								bind:value={idea}
+								placeholder="Idea {i + 1}"
+							/>
+						</div>
+					{/each}
+					<div class="flex justify-end">
+						<button
+							class="ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+							type="submit"
+							disabled={newIdeaCount < ideasPerRound}
+						>
+							Submit
+						</button>
+					</div>
 				</div>
-			{/each}
-		</fieldset>
-
-		<button
-			disabled={newIdeaCount < ideasPerRound}
-			class="disabled:cursor-not-allowed disabled:text-gray-500"
-			type="submit">Submit</button
-		>
-	</form>
-{/if}
+			</div>
+		</form>
+	{/if}
+</div>

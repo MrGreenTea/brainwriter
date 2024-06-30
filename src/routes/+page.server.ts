@@ -32,16 +32,20 @@ export const load: PageServerLoad = ({ cookies }) => {
 	};
 };
 
+currentRound.subscribe((n) => console.log('Starting round', n));
+
 const nextRound = () => {
-	let ideas = get(pages).map((p) => p.writtenIdeas);
+	const currentPages = get(pages);
+	if (currentPages.length < 2) {
+		return;
+	}
+	let ideas = currentPages.map((p) => p.writtenIdeas);
 	// shift ideas one place to the left
 	ideas = [...ideas.slice(1), ideas[0]];
 	pages.update((ps) =>
 		ideas.map((ideas, i) => ({ ...ps[i], writtenIdeas: ideas, submitted: false }))
 	);
-	currentRound.update((n) => n + 1);
-
-	console.log('Starting round', get(currentRound));
+	currentRound.update((r) => r + 1);
 };
 
 export const actions: Actions = {
