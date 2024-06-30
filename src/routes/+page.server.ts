@@ -45,7 +45,7 @@ const nextRound = () => {
 	pages.update((ps) =>
 		ideas.map((ideas, i) => ({ ...ps[i], writtenIdeas: ideas, submitted: false }))
 	);
-	currentRound.update((r) => r + 1);
+	currentRound.update((r) => ({ round: r.round + 1, start: Date.now() }));
 };
 
 export const actions: Actions = {

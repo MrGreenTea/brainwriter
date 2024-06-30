@@ -22,7 +22,12 @@ export type Page = {
 	ideasPerRound: number;
 };
 
+export type Round = {
+	round: number;
+	start: number;
+};
+
 export const pages = writable<Page[]>([]);
 pages.subscribe(console.log);
 
-export const currentRound = writable(1);
+export const currentRound = writable<Round>({ round: 0, start: Date.now() });

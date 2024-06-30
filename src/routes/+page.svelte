@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { source } from 'sveltekit-sse';
-	import type { Page } from '$lib/data';
+	import type { Page, Round } from '$lib/data';
 	import type { PageData } from './$types';
 	import { derived, type Readable } from 'svelte/store';
 	import PageComponent from '$lib/components/Page.svelte';
 
-	const currentRound = source('/api').select('round');
+	const currentRound: Readable<Round> = source('/api').select('round').json();
 	const pages = source('/api')
 		.select('pages')
 		.json(function or({ error, raw, previous }) {
@@ -23,6 +23,13 @@
 
 	let newIdeas = new Array(ideasPerRound).fill('');
 	$: newIdeaCount = newIdeas.filter((idea) => idea.trim() !== '').length;
+
+	let timeLeft = '5:00';
+	currentRound.subscribe(console.log);
+	setInterval(() => {
+		const diff = Math.max(5 * 60 - Math.ceil((Date.now() - initialRound.start) / 1000), 0);
+		timeLeft = `${Math.floor(diff / 60)}:${String(diff % 60).padStart(2, '0')}`;
+	}, 505);
 </script>
 
 <div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
@@ -44,7 +51,7 @@
 						class="h-5 w-5"
 						><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"
 						></line><circle cx="12" cy="14" r="8"></circle></svg
-					><span class="text-lg font-medium">5:00</span>
+					><span class="font-mono text-lg font-medium">{timeLeft}</span>
 				</div>
 				<a
 					href="/all"
@@ -57,7 +64,7 @@
 	<PageComponent
 		page={$page || initialPage}
 		title="Previous Ideas"
-		subtitle={`Current Round: ${$currentRound || initialRound}`}
+		subtitle={`Current Round: ${$currentRound?.round || initialRound.round}`}
 	/>
 	{#if $page.submitted}
 		<p class="text-sm text-muted-foreground">
