@@ -1,10 +1,10 @@
 import { error, type Cookies } from '@sveltejs/kit';
+import { get } from 'svelte/store';
+
 import type { PageServerLoad, Actions } from './$types';
-import { pages } from '$lib/data';
+import { pages, currentRound } from '$lib/data';
 
 const IDEAS_PER_ROUND = 3;
-
-let currentRound = 1;
 
 const getSessionId = (cookies: Cookies) => {
 	let sessionid = cookies.get('sessionid');
@@ -19,7 +19,7 @@ const getSessionId = (cookies: Cookies) => {
 };
 
 const getPage = (sessionId: string) => {
-	let page = pages.find((page) => page.sessionId === sessionId);
+	const page = get(pages).find((page) => page.sessionId === sessionId);
 	if (!page) {
 		throw new Error('No page for session');
 	}
@@ -28,14 +28,17 @@ const getPage = (sessionId: string) => {
 
 export const load: PageServerLoad = ({ cookies }) => {
 	const sessionId = getSessionId(cookies);
-	if (!pages.some((p) => p.sessionId === sessionId)) {
-		if (currentRound === 1) {
-			pages.push({
-				sessionId,
-				writtenIdeas: [],
-				submitted: false,
-				ideasPerRound: IDEAS_PER_ROUND
-			});
+	if (!get(pages).some((p) => p.sessionId === sessionId)) {
+		if (get(currentRound) === 1) {
+			pages.update((ps) => [
+				...ps,
+				{
+					sessionId,
+					writtenIdeas: [],
+					submitted: false,
+					ideasPerRound: IDEAS_PER_ROUND
+				}
+			]);
 		} else {
 			error(403, 'No page for session');
 		}
@@ -43,40 +46,47 @@ export const load: PageServerLoad = ({ cookies }) => {
 
 	const page = getPage(sessionId);
 	return {
-		page
+		page,
+		currentRound: get(currentRound)
 	};
 };
 
 const nextRound = () => {
-	let ideas = pages.map((p) => p.writtenIdeas);
+	let ideas = get(pages).map((p) => p.writtenIdeas);
 	// shift ideas one place to the left
 	ideas = [...ideas.slice(1), ideas[0]];
-	pages.forEach((page, i) => {
-		page.writtenIdeas = ideas[i];
-		page.submitted = false;
-	});
-	currentRound++;
+	pages.update((ps) =>
+		ideas.map((ideas, i) => ({ ...ps[i], writtenIdeas: ideas, submitted: false }))
+	);
+	currentRound.update((n) => n + 1);
 };
 
 export const actions: Actions = {
 	default: async (event) => {
 		const sessionid = getSessionId(event.cookies);
 		const page = getPage(sessionid);
+		if (page.submitted) {
+			error(400, 'Already submitted');
+		}
 		const formData = await event.request.formData();
 		console.log(formData);
 
 		// iterate over all three idea fields
 		// and add them to the IdeasMap
-		let newIdeas = [];
+		const newIdeas = [];
 		for (let i = 0; i < 3; i++) {
-			const idea = formData.get(`idea${i}`) as string;
-			if (idea) {
+			let idea = formData.get(`idea${i}`) as string;
+			idea = idea && idea.trim();
+			if (idea.length > 0) {
 				newIdeas.push(idea);
 			}
 		}
+		if (newIdeas.length !== IDEAS_PER_ROUND) {
+			error(400, 'Not enough ideas');
+		}
 		page.writtenIdeas.push(...newIdeas);
 		page.submitted = true;
-		if (pages.every((p) => p.submitted)) {
+		if (get(pages).every((p) => p.submitted)) {
 			nextRound();
 		}
 	}
