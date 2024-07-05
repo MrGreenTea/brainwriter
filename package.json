@@ -10,7 +10,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"pocketbase": "./pocketbase serve"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -39,6 +40,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"pocketbase": "^0.21.3"
+		"sveltekit-sse": "^0.13.2"
 	}
 }
