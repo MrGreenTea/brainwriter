@@ -2,15 +2,7 @@ import { error } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 
 import type { PageServerLoad, Actions } from './$types';
-import { IDEAS_PER_ROUND, pages, currentRound, getSessionId } from '$lib/data';
-
-const getPage = (sessionId: string) => {
-	const page = get(pages).find((page) => page.sessionId === sessionId);
-	if (!page) {
-		throw new Error('No page for session');
-	}
-	return page;
-};
+import { IDEAS_PER_ROUND, pages, currentRound, getSessionId, getPage } from '$lib/data';
 
 export const load: PageServerLoad = ({ cookies }) => {
 	const sessionId = getSessionId(cookies);
@@ -22,7 +14,8 @@ export const load: PageServerLoad = ({ cookies }) => {
 				sessionId,
 				writtenIdeas: [],
 				submitted: false,
-				ideasPerRound: IDEAS_PER_ROUND
+				ideasPerRound: IDEAS_PER_ROUND,
+				connected: false
 			}
 		]);
 	}
@@ -73,7 +66,7 @@ export const actions: Actions = {
 		page.writtenIdeas.push(...newIdeas);
 		page.submitted = true;
 		pages.update((ps) => [...ps]);
-		if (get(pages).every((p) => p.submitted)) {
+		if (get(pages).every((p) => p.submitted || !p.connected)) {
 			nextRound();
 		}
 	}
